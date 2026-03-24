@@ -14,7 +14,17 @@ app.use(
   })
 );
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://cavaluer.com",
+      "https://www.cavaluer.com",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
 
 if (config.NODE_ENV === "development") {
   app.use(morgan("dev"));
