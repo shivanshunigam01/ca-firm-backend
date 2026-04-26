@@ -38,7 +38,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     success: true,
     status: "OK",
-    message: "CA Firm API is running",
+    message: "CA Shivanand Choudhary API is running",
     timestamp: new Date().toISOString(),
     environment: config.NODE_ENV,
   });

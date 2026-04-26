@@ -1,8 +1,51 @@
 const Lead = require("../models/Lead");
+const { sendEmail } = require("../utils/sendEmail");
 
 const createLead = async (req, res, next) => {
   try {
-    const lead = await Lead.create(req.body);
+    const payload = {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      subject: req.body.subject,
+      message: req.body.message,
+      service: req.body.service,
+      subService: req.body.subService,
+      leadType: req.body.leadType || "general",
+      businessType: req.body.businessType,
+      revenue: req.body.revenue,
+      purpose: req.body.purpose,
+      businessStage: req.body.businessStage,
+      source: req.body.source,
+      page: req.body.page,
+      device: req.body.device,
+    };
+
+    const lead = await Lead.create(payload);
+
+    if (lead.leadType === "valuation") {
+      try {
+        await sendEmail({
+          to: process.env.SMTP_FROM || process.env.SMTP_USER,
+          subject: `New Valuation Lead: ${lead.name}`,
+          text: [
+            "A new valuation enquiry has been submitted.",
+            `Name: ${lead.name}`,
+            `Phone: ${lead.phone}`,
+            `Email: ${lead.email || "-"}`,
+            `Business Type: ${lead.businessType || "-"}`,
+            `Revenue: ${lead.revenue || "-"}`,
+            `Purpose: ${lead.purpose || "-"}`,
+            `Business Stage: ${lead.businessStage || "-"}`,
+            `Service: ${lead.service || "-"}`,
+            `Message: ${lead.message || "-"}`,
+          ].join("\n"),
+        });
+      } catch (emailError) {
+        console.warn("Lead notification email failed:", emailError.message);
+      }
+    }
+
     res.status(201).json({ success: true, lead });
   } catch (error) {
     next(error);
@@ -11,12 +54,14 @@ const createLead = async (req, res, next) => {
 
 const getLeads = async (req, res, next) => {
   try {
-    const { status, search, page = 1, limit = 20, sort = "-createdAt" } = req.query;
+    const { status, leadType, service, search, page = 1, limit = 20, sort = "-createdAt" } = req.query;
     const numericPage = Number(page);
     const numericLimit = Number(limit);
 
     const query = {};
     if (status) query.status = status;
+    if (leadType) query.leadType = leadType;
+    if (service) query.service = service;
 
     if (search) {
       query.$or = [

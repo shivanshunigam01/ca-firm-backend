@@ -7,7 +7,7 @@ const buildQuotationPdf = async (quotation) => {
   const doc = new jsPDF();
 
   doc.setFontSize(18);
-  doc.text("CA Shivanand & Choudhary", 14, 18);
+  doc.text("CA Shivanand Choudhary", 14, 18);
   doc.setFontSize(11);
   doc.text("Quotation Document", 14, 26);
 

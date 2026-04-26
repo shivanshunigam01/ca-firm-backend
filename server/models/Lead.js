@@ -33,6 +33,27 @@ const leadSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    leadType: {
+      type: String,
+      enum: ["general", "valuation"],
+      default: "general",
+    },
+    businessType: {
+      type: String,
+      trim: true,
+    },
+    revenue: {
+      type: String,
+      trim: true,
+    },
+    purpose: {
+      type: String,
+      enum: ["funding", "sale", "compliance", "tax", "other"],
+    },
+    businessStage: {
+      type: String,
+      enum: ["startup", "sme", "corporate"],
+    },
     source: {
       type: String,
       enum: ["contact_form", "chatbot", "get_started", "service_page"],
@@ -65,5 +86,7 @@ const leadSchema = new mongoose.Schema(
 
 leadSchema.index({ name: "text", email: "text", phone: "text" });
 leadSchema.index({ status: 1, createdAt: -1 });
+leadSchema.index({ leadType: 1, createdAt: -1 });
+leadSchema.index({ service: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Lead", leadSchema);

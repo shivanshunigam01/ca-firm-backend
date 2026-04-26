@@ -1,4 +1,4 @@
-# CA Shivanand & Choudhary Backend
+# CA Shivanand Choudhary Backend
 
 Node.js + Express.js backend API for admin panel, user panel, leads, customers, quotations, content management, chatbot, and dashboard.
 

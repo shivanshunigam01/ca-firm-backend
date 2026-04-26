@@ -36,6 +36,17 @@ const leadRules = [
   body("name").trim().notEmpty().withMessage("Name is required"),
   body("phone").trim().notEmpty().withMessage("Phone is required"),
   body("email").optional({ checkFalsy: true }).isEmail().withMessage("Valid email is required"),
+  body("leadType").optional().isIn(["general", "valuation"]).withMessage("Invalid lead type"),
+  body("businessType").optional({ checkFalsy: true }).trim(),
+  body("revenue").optional({ checkFalsy: true }).trim(),
+  body("purpose")
+    .optional({ checkFalsy: true })
+    .isIn(["funding", "sale", "compliance", "tax", "other"])
+    .withMessage("Invalid valuation purpose"),
+  body("businessStage")
+    .optional({ checkFalsy: true })
+    .isIn(["startup", "sme", "corporate"])
+    .withMessage("Invalid business stage"),
   body("source")
     .optional()
     .isIn(["contact_form", "chatbot", "get_started", "service_page"])
@@ -84,6 +95,22 @@ const chatRules = [body("message").trim().notEmpty().withMessage("Message is req
 
 const idRule = [param("id").isMongoId().withMessage("Invalid ID")];
 
+const shareQuotationRules = [
+  body("email")
+    .optional({ checkFalsy: true })
+    .isEmail()
+    .withMessage("Valid email is required"),
+  body("whatsapp").optional({ checkFalsy: true }).trim().isString(),
+  body().custom((_, { req }) => {
+    const e = req.body.email && String(req.body.email).trim();
+    const w = req.body.whatsapp && String(req.body.whatsapp).trim();
+    if (!e && !w) {
+      throw new Error("Provide at least an email or a WhatsApp number");
+    }
+    return true;
+  }),
+];
+
 module.exports = {
   validate,
   loginRules,
@@ -96,4 +123,5 @@ module.exports = {
   contentRules,
   chatRules,
   idRule,
+  shareQuotationRules,
 };

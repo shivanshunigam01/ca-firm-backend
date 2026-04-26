@@ -207,8 +207,8 @@ const emailQuotation = async (req, res, next) => {
     const pdfBuffer = await buildQuotationPdf(quotation);
     await sendEmail({
       to: quotation.customerEmail,
-      subject: `Quotation ${quotation.quotationNumber} from CA Shivanand & Choudhary`,
-      text: `Dear ${quotation.customerName},\n\nPlease find attached quotation ${quotation.quotationNumber}.\n\nRegards,\nCA Shivanand & Choudhary`,
+      subject: `Quotation ${quotation.quotationNumber} from CA Shivanand Choudhary`,
+      text: `Dear ${quotation.customerName},\n\nPlease find attached quotation ${quotation.quotationNumber}.\n\nRegards,\nCA Shivanand Choudhary`,
       attachments: [
         {
           filename: `${quotation.quotationNumber}.pdf`,

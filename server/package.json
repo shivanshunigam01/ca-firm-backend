@@ -1,7 +1,7 @@
 {
   "name": "ca-firm-backend",
   "version": "1.0.0",
-  "description": "Backend API for CA Shivanand & Choudhary website",
+  "description": "Backend API for CA Shivanand Choudhary website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
